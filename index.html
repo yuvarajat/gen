@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invitation</title>
+</head>
+
+<body>
+
+    <select id="gender" onchange="generateLink()">
+        <option value="male" selected>Male</option>
+        <option value="female">Female</option>
+    </select>
+
+    <input type="text" id="name" onkeyup="generateLink()" placeholder="Enter your name">
+    <button onclick="copy()">Copy</button>
+    <a id="link" href="" target="_blank"></a>
+
+    <script>
+        let invitationLink = "https://yuvarajawedsbharathy.in/index.html"; // Base link
+
+        async function copy() {
+            await navigator.clipboard.writeText(invitationLink);
+            alert("Link copied to clipboard!"); // Optional: Notify the user
+        }
+
+        function generateLink() {
+            const nameText = document.getElementById("name").value;
+            const genderValue = document.getElementById("gender").value;
+            const linkElement = document.querySelector("#link");
+
+            // Determine the prefix based on selected gender
+            let prefix = '';
+            if (genderValue === 'male') {
+                prefix = 'Mr.';
+            } else if (genderValue === 'female') {
+                prefix = 'Ms.';
+            }
+
+            // Construct the full name with prefix
+            const fullName = prefix ? `${prefix} ${nameText}` : nameText;
+
+            let link = new URL(invitationLink);
+            link.searchParams.set("invite", btoa(fullName)); // Set the invite query parameter
+
+            invitationLink = link.toString();
+            linkElement.setAttribute("href", invitationLink);
+            linkElement.innerHTML = invitationLink; // Display the generated link
+        }
+    </script>
+</body>
+
+</html>
